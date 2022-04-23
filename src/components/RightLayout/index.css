@@ -1,0 +1,11 @@
+#header {
+    background-color: midnightblue;
+    padding: 0;
+    font-size: 50px;
+    color: white;
+}
+
+#headerContent {
+    width: 400px;
+    margin: 0 auto;
+}

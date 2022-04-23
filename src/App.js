@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css"
+import React from "react"
+import {Layout} from "antd"
+import LeftSider from "./components/LeftSider"
+import RightLayout from "./components/RightLayout"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [select,getSelect] = React.useState()
+
+    return (
+        <>
+            <Layout style={{minHeight: "100vh"}}>
+                <LeftSider select={select} getSelect={getSelect}/>
+                <RightLayout select={select}/>
+            </Layout>
+        </>
+    )
 }
 
-export default App;
+export default App
