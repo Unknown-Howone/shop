@@ -25,7 +25,7 @@ const RightLayout = () => {
                 </Header>
 
                 <Content style={{margin: "0 16px"}}>
-
+                    <NavLink id={'index'} to={"/"}/>
                     <NavLink id={'AllUsers'} to={"/AllUsers"}/>
                     <NavLink id={'VipUsers'} to={"/VipUsers"}/>
                     <NavLink id={'LockedUsers'} to={"/LockedUsers"}/>

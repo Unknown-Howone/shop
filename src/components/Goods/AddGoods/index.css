@@ -1,0 +1,17 @@
+#addGoods {
+    width: 50%;
+    height: 80%;
+    position: relative;
+    top: 20%;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+
+#addGoods Form {
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    top: 10%;
+    left: -10%;
+
+}
