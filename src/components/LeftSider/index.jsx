@@ -29,16 +29,13 @@ const LeftSider = () => {
 
                     <Menu.SubMenu key="goodsMenu" title="商品管理" icon={<AccountBookOutlined/>}>
                         <Menu.Item key="SelectGoods" onClick={click}>
-                            查看商品
+                            已上架商品
+                        </Menu.Item>
+                        <Menu.Item key="UpdateGoods" onClick={click}>
+                            更改价格
                         </Menu.Item>
                         <Menu.Item key="AddGoods" onClick={click}>
                             添加商品
-                        </Menu.Item>
-                        <Menu.Item key="DeleteGoods" onClick={click}>
-                            删除商品
-                        </Menu.Item>
-                        <Menu.Item key="UpdateGoods" onClick={click}>
-                            更改商品
                         </Menu.Item>
                     </Menu.SubMenu>
 
@@ -46,8 +43,8 @@ const LeftSider = () => {
                         <Menu.Item key="Votes" onClick={click}>
                             查看DIY投票
                         </Menu.Item>
-                        <Menu.Item key="AddDIY" onClick={click}>
-                            添加DIY商品
+                        <Menu.Item key="Material" onClick={click}>
+                            DIY原料对照
                         </Menu.Item>
                     </Menu.SubMenu>
                 </Menu>

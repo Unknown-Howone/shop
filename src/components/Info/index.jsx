@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import {Button, Drawer} from "antd"
 import Login from "../Login"
 import HasLogin from "../HasLogin"
@@ -17,6 +17,26 @@ const Info = () => {
     const onClose = () => {
         setVisible(false)
     }
+
+    // 进入系统时尝试使用token来登录
+    useEffect(()=>{
+        fetch(
+            "http://localhost:8081/tokenLogin",
+            {
+                method: "GET",
+                mode: 'cors',
+                // 携带cookie
+                credentials: 'include',
+            }).then(response => {
+            return response.json()
+        }).then(data => {
+            if (data === "yes") {
+                setIsLogin(true)
+            } else if (data === "no") {
+                setIsLogin(false)
+            }
+        })
+    },[])
 
     return (
         <>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import {Avatar, Divider, List, Skeleton} from "antd"
+import {Avatar, Divider, List, Skeleton, Statistic} from "antd"
 
 const VipUsers = () => {
     const [loading, setLoading] = useState(false)
@@ -11,10 +11,10 @@ const VipUsers = () => {
             return
         }
         setLoading(true)
-        fetch("https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo")
+        fetch("http://localhost:8081/allVipUsers")
             .then(res => res.json())
             .then(body => {
-                setData([...data, ...body.results])
+                setData([...data, ...body])
                 setLoading(false)
             })
             .catch(() => {
@@ -25,10 +25,12 @@ const VipUsers = () => {
     useEffect(() => {
         loadMoreData()
     }, [])
+
     return (
         <div
             id="scrollableDiv"
             style={{
+                backgroundImage:"linear-gradient(to top, #a8edea 0%, #fed6e3 100%)",
                 height: "100vh",
                 overflow: "auto",
                 padding: "0 16px",
@@ -38,7 +40,7 @@ const VipUsers = () => {
             <InfiniteScroll
                 dataLength={data.length}
                 next={loadMoreData}
-                hasMore={data.length < 50}
+                hasMore={false}
                 loader={<Skeleton avatar paragraph={{rows: 1}} active/>}
                 endMessage={<Divider plain>已加载所有用户</Divider>}
                 scrollableTarget="scrollableDiv"
@@ -48,11 +50,17 @@ const VipUsers = () => {
                     renderItem={item => (
                         <List.Item key={item.id}>
                             <List.Item.Meta
-                                avatar={<Avatar src={item.picture.large}/>}
-                                title={<a href="https://ant.design">{item.name.last}</a>}
-                                description={item.email}
+                                avatar={<Avatar src={"http://howone.vip:8080/static/%E5%A5%B6%E8%8C%B6/%E7%BA%A2%E8%8C%B6.jpeg"}/>}
+                                title={<a href="javascript:;">{item.uname}</a>}
+                                description={item.status===1?"状态:正常":"状态:冻结"}
                             />
-                            <div>Content</div>
+                            {
+                                item.credit >= 1000
+                                    ?
+                                    <Statistic title="积分" value={item.credit} valueStyle={{color:"red"}}/>
+                                    :
+                                    <Statistic title="积分" value={item.credit}/>
+                            }
                         </List.Item>
                     )}
                 />

@@ -7,11 +7,8 @@
     border: 1px solid black;
 }
 
-#addGoods Form {
-    width: 90%;
-    margin: 0 auto;
+.input {
     position: relative;
-    top: 10%;
-    left: -10%;
-
+    margin-top: 80px;
+    left: 140px;
 }

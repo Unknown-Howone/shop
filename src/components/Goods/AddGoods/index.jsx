@@ -1,60 +1,69 @@
 import React from "react"
-import {Upload, message,Button, Form, Input} from "antd"
-import { UploadOutlined } from '@ant-design/icons'
 import './index.css'
+import {Button,message} from "antd"
 
 const AddGoods = () => {
-    const onFinish = (values) => {
-        console.log("Success:", values)
+    // 上传商品信息到数据库,不包含商品图片
+    const addGood = () => {
+        let name = document.querySelector("#name").value
+        let price = document.querySelector("#price").value
+        let good = {
+            "sname": name,
+            "price": parseFloat(price),
+            "picture": name + ".jpeg"
+        }
+        fetch(
+            "http://localhost:8081/addGood",
+            {
+                method: "POST",
+                mode: 'cors',
+                // 携带cookie
+                credentials: 'include',
+                body:JSON.stringify(good)
+            }).then(response => {
+            return response.json()
+        }).then(data => {
+            // 添加成功
+            if (data === "yes") {
+                // eslint-disable-next-line no-restricted-globals
+                location.reload()
+            } else if (data === "no_token" || data === "no") {
+                message.error("请登录")
+            }
+        })
     }
 
-    const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo)
-    }
-
-    const prop = {
-        name: 'file',
-        action: '',
-        headers: {
-            authorization: 'authorization-text',
-        },
-        onChange(info) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
+    // 上传图片
+    const upload = () => {
+        let file = document.querySelector("#file")
+        const fd = new FormData()
+        fd.append('file', file.files[0])
+        fetch('http://howone.vip:8080/upload', {
+            method: 'POST',
+            body: fd,
+        }).then(res => {
+            return res.json()
+        }).then(data => {
+            // 上传成功
+            if (data === "yes") {
+                // eslint-disable-next-line no-restricted-globals
+                message.success('上传图片成功')
+            } else if (data === "no") {
+                message.error("上传失败")
             }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully`)
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed.`)
-            }
-        },
+        })
     }
 
     return (
-        <div id="addGoods">
-            <Form name="basic" labelCol={{span: 8,}} wrapperCol={{span: 16,}} initialValues={{remember: true,}} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
-                {/*输入商品名称*/}
-                <Form.Item label="商品名称" name="goodsName" rules={[{required: true, message: "请输入商品名称",},]}>
-                    <Input/>
-                </Form.Item>
-                {/*输入商品金额*/}
-                <Form.Item label="金额" name="price" rules={[{required: true, message: "请输入商品价格",},]}>
-                    <Input.Password/>
-                </Form.Item>
-                {/*上传图片*/}
-                <Form.Item wrapperCol={{offset: 8, span: 16,}}>
-                    <Upload {...prop}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                </Form.Item>
-                {/*提交按钮*/}
-                <Form.Item wrapperCol={{offset: 8, span: 16,}}>
-                    <Button type="primary" htmlType="submit">
-                        添加
-                    </Button>
-                </Form.Item>
-
-            </Form>
+        <div id="addGoods" style={{backgroundImage: "linear-gradient(135deg, #c3cfe2 0%, #f5f7fa 100%)"}}>
+            <form>
+                <input id="name" className="input" placeholder="商品名称" style={{width:"350px"}}/>
+                <input id="price" className="input" placeholder="商品价格" style={{width:"350px"}}/>
+                <input className="input" type="file" name="file" id="file"/>
+                <Button style={{position:"relative",left:"50px"}} onClick={upload} danger type="primary">上传商品图片</Button>
+                <br/>
+                <Button onClick={addGood} type="primary" style={{position:"relative",left:"270px",top:"40px"}}>添加商品</Button>
+            </form>
         </div>
     )
 }

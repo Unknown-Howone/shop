@@ -1,10 +1,8 @@
-import React,{useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import {Avatar, Button, Divider, Input, List, Skeleton, Tooltip} from "antd"
-import NumericInput from "../FormOfGood"
-import FormOfGood from "../FormOfGood"
+import {Avatar, Button, Divider, List, Skeleton} from "antd"
 
-const UpdateGoods = () => {
+const Material = () => {
     const [load, setLoad] = useState(false)
     const [data, setData] = useState([])
 
@@ -13,7 +11,7 @@ const UpdateGoods = () => {
             return
         }
         setLoad(true)
-        fetch("http://localhost:8081/allGoods")
+        fetch("http://localhost:8081/material")
             .then(res => res.json())
             .then(body => {
                 setData([...data, ...body])
@@ -28,10 +26,28 @@ const UpdateGoods = () => {
         loadMoreData()
     }, [])
 
+    const updateName = (item) => {
+        return function () {
+            item.mname = document.querySelector("#" + item.mname).value
+            fetch("http://localhost:8081/u", {
+                method: "POST",
+                mode: "cors",
+                credentials: "include",
+                body: JSON.stringify(item),
+            }).then(res => {
+                return res.json()
+            }).then(data => {
+                // eslint-disable-next-line no-restricted-globals
+                location.reload()
+            })
+        }
+    }
+
     return (
         <div
             id="scrollableDiv"
             style={{
+                backgroundColor: "lightyellow",
                 height: "100vh",
                 overflow: "auto",
                 padding: "0 16px",
@@ -43,7 +59,7 @@ const UpdateGoods = () => {
                 next={loadMoreData}
                 hasMore={false}
                 loader={<Skeleton avatar paragraph={{rows: 1}} active/>}
-                endMessage={<Divider plain>已加载所有商品</Divider>}
+                endMessage={<Divider plain>已加载所有原料</Divider>}
                 scrollableTarget="scrollableDiv"
             >
                 <List
@@ -51,12 +67,13 @@ const UpdateGoods = () => {
                     renderItem={item => (
                         <List.Item key={item.id}>
                             <List.Item.Meta
-                                avatar={<Avatar src={"http://howone.vip:8080/static/奶茶/" + item.picture}/>}
-                                title={<a href="javascript:;">{item.sname}</a>}
-                                description={"¥" + item.price}
+                                avatar={<Avatar src={"http://howone.vip:8080/static/原料/" + item.picture}/>}
+                                title={<a href="#">{item.mname}</a>}
+                                description={"原料ID:" + item.id}
                             />
+                            <input type="text" id={item.mname.toString()}/>
                             <div>
-                                <FormOfGood item={item}/>
+                                <Button type={"primary"} onClick={updateName(item)}>更改</Button>
                             </div>
                         </List.Item>
                     )}
@@ -66,4 +83,4 @@ const UpdateGoods = () => {
     )
 }
 
-export default UpdateGoods
+export default Material
